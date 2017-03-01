@@ -8,6 +8,7 @@ class FlyBehaviour {
   // abstract class (interface in java-speak)
 public:
   virtual void fly() = 0;
+  virtual ~FlyBehaviour(){}
 };
 
 class FlyWithWings: public FlyBehaviour {
@@ -19,14 +20,16 @@ public:
 
 class FlyNoWay: public FlyBehaviour {
 public:
-  // override to do nothing
-  void fly() {}
+  void fly() {
+    cout << "sorry guys, I'm grounded" << endl;
+  }
 };
 
 class QuackBehaviour {
   // abstract class (interface in java-speak)
 public:
   virtual void quack() = 0;
+  virtual ~QuackBehaviour() {}
 };
 
 class Quack: public QuackBehaviour {
@@ -67,13 +70,20 @@ public:
   }
   void setFlyBehaviour(FlyBehaviour *input)
   {
+    delete flybehaviour;
     flybehaviour = input;
   }
   void setQuackBehaviour(QuackBehaviour *input)
   {
+    delete quackbehaviour;
     quackbehaviour = input;
   }
   // OTHER duck-like methods
+  virtual ~Duck()
+  {
+    delete flybehaviour;
+    delete quackbehaviour;
+  }
 protected:
   QuackBehaviour *quackbehaviour;
   FlyBehaviour *flybehaviour;
@@ -88,15 +98,14 @@ public:
 };
   
 int main(void){
-  MallardDuck bruce;
-  Squeak overridequack;
-  FlyNoWay overridefly;
-  bruce.performQuack();
-  bruce.performFly();
-  bruce.setQuackBehaviour(&overridequack);
-  bruce.setFlyBehaviour(&overridefly);
-  bruce.performQuack();
-  // no output here - fly has been overriden
-  bruce.performFly();
+  Duck *bruce = new MallardDuck();
+  QuackBehaviour *overridequack = new Squeak();
+  FlyBehaviour *overridefly = new FlyNoWay();
+  bruce->performQuack();
+  bruce->performFly();
+  bruce->setQuackBehaviour(overridequack);
+  bruce->setFlyBehaviour(overridefly);
+  bruce->performQuack();
+  bruce->performFly();
   return 0;
 }
