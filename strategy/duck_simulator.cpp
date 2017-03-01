@@ -107,5 +107,6 @@ int main(void){
   bruce->setFlyBehaviour(overridefly);
   bruce->performQuack();
   bruce->performFly();
+  delete bruce;
   return 0;
 }
